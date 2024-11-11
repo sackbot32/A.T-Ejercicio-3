@@ -8,6 +8,7 @@ public class PlayerControl : MonoBehaviour
     //Components
     private CharacterController controller;
     private Transform cameraTransform;
+    private WeaponController wController;
     //Settings
     [SerializeField]
     private float speed;
@@ -52,6 +53,7 @@ public class PlayerControl : MonoBehaviour
         canSprint = true;
         currentSprintValue = maxSprintValue;
         sprintBar.value = currentSprintValue;
+        wController = GetComponent<WeaponController>();
         controller = GetComponent<CharacterController>();
         cameraTransform = Camera.main.transform;
 
@@ -91,7 +93,7 @@ public class PlayerControl : MonoBehaviour
     {
         if(currentSprintValue > 0 && canSprint)
         {
-            isSprinting = context.started || context.performed;
+            isSprinting = (context.started || context.performed) && moveInput != Vector2.zero;
         } else
         {
             isSprinting = false;
@@ -135,10 +137,18 @@ public class PlayerControl : MonoBehaviour
 
     }
 
+    public void ShootInput(InputAction.CallbackContext context)
+    {
+        if (wController.CanShoot() && context.started)
+        {
+            wController.Shoot();
+        }
+    }
+
     private IEnumerator DrainStamina()
     {
         isDraining = true;
-        while(currentSprintValue > 0f && isSprinting)
+        while(currentSprintValue > 0f && isSprinting && moveInput != Vector2.zero)
         {
             currentSprintValue -= sprintingDrainingAmmount;
             sprintBar.value = currentSprintValue;
