@@ -70,7 +70,7 @@ public class EnemyControl : MonoBehaviour
             }
         } else
         {
-            if(!agent.pathPending && agent.remainingDistance < 1f)
+            if(!agent.pathPending)
             {
                 agent.stoppingDistance = 0f;
                 agent.SetDestination(patrolPointList[currentPatrolPoint].position);
@@ -105,7 +105,7 @@ public class EnemyControl : MonoBehaviour
     /// </summary>
     private void PatrolWithChild()
     {
-        if (patrolPointList.Count > 0)
+        if (patrolPointsParent.childCount > 0)
         {
 
             if (agent.destination == null || !agent.pathPending)

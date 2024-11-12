@@ -51,9 +51,28 @@ public class WeaponController : MonoBehaviour
         //Locate the ball at the barrel pos
         bullet.transform.position = barrel.position;
         bullet.transform.rotation = barrel.rotation;
-        //TODO BulletController damage and speed
+
         bullet.GetComponent<BulletController>().Damage = damage;
-        bullet.GetComponent<Rigidbody>().linearVelocity = barrel.forward * bulletSpeed;
+        if (isPlayer)
+        {
+            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f,0));
+            RaycastHit hit;
+            Vector3 targetPoint;
+
+            if(Physics.Raycast(ray, out hit))
+            {
+                targetPoint = hit.point;
+            } else
+            {
+                targetPoint = ray.GetPoint(5);
+            }
+            bullet.GetComponent<Rigidbody>().linearVelocity = (targetPoint - barrel.position).normalized * bulletSpeed;
+        } else
+        {
+            bullet.GetComponent<Rigidbody>().linearVelocity = barrel.forward * bulletSpeed;
+        }
+        //TODO BulletController damage and speed
+       
 
         bullet.SetActive(true);
     }
