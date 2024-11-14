@@ -35,6 +35,13 @@ public class WeaponController : MonoBehaviour
 
         objPool = GetComponent<ObjectPool>();
     }
+    //TODO add more things to set
+    public void SetWeaponSettings(float newShootRate = 1f, int newDamage = 1,float newBulletSpeed = 25f)
+    {
+        shootRate = newShootRate;
+        damage = newDamage;
+        bulletSpeed = newBulletSpeed;
+    }
     /// <summary>
     /// Handle Weapon Shoot
     /// </summary>

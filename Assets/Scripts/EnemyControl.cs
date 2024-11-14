@@ -5,6 +5,8 @@ using System.IO;
 public class EnemyControl : MonoBehaviour
 {
     [Header("Enemy Data")]
+    [SerializeField]
+    private EnemyData enemyData;
     [SerializeField] 
     private int currentLife;
     [SerializeField] 
@@ -21,20 +23,32 @@ public class EnemyControl : MonoBehaviour
 
     private WeaponController wController;
 
+    private MeshRenderer enemRender;
+
     [SerializeField]
     private bool playerSeen;
 
 
     private void Start()
     {
+        wController = GetComponent<WeaponController>();
+        playerTrans = GameObject.FindGameObjectWithTag("Player").transform;
+        agent = GetComponent<NavMeshAgent>();
+        enemRender = transform.GetChild(1).GetComponent<MeshRenderer>();
+        if(enemyData != null)
+        {
+            maxsLife = enemyData.MaxLife;
+            agent.speed = enemyData.Speed;
+            wController.SetWeaponSettings(enemyData.ShootRate);
+            enemRender.material = enemyData.Material;
+        }
         patrolPointList = new List<Transform>();
         foreach (Transform item in patrolPointsParent)
         {
             patrolPointList.Add(item);
         }
-        wController = GetComponent<WeaponController>();
-        playerTrans = GameObject.FindGameObjectWithTag("Player").transform;
-        agent = GetComponent<NavMeshAgent>();
+        currentPatrolPoint = Random.Range(0, patrolPointsParent.childCount);
+        print(currentPatrolPoint);
     }
     private void Update()
     {

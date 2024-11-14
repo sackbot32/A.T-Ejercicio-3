@@ -34,11 +34,12 @@ public class BulletController : MonoBehaviour
             Instantiate(damageParticle, transform.position, Quaternion.identity);
             other.GetComponent<EnemyControl>().DamageEnemy(Damage);
         }
-        else if(other.GetComponent<PlayerControl>() != null)
+        else if(other.GetComponent<PlayerHealth>() != null)
         {
             Instantiate(damageParticle, transform.position, Quaternion.identity);
-            print("ay no me has hecho pupa");
-             
+            other.GetComponent<PlayerHealth>().TakeDamage(damage);
+
+
         }
         else
         {
